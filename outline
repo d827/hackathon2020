@@ -1,0 +1,24 @@
+DeTox Me
+--------------
+
+-Increasingly difficult questions (maybe from an api)
+-Trick questions
+	*Questions that say the name of a color but are colored differently
+	*Typing challenge (timed)
+	*image based captcha
+	*Profiling questions
+	*Audio questions
+	*Basic math
+	*Easy reading comprehension
+-In theory would restrict access to functions on the phone
+-Simple interface
+-Microtransactions
+-Timer based / Set in advance
+-A guideline rather than a definitive lockout system
+-Based on how you perform, would give score, if you don't get a certain score you can't pass to the next level
+-Based on the final score you are given guidelines as to what you should and should not do
+-Sound effects
+-Different types of questions
+-Persistence API (Leaderboard, Times failed)
+-Presents emergency contact info,
+-On first time startup, asks for info to be saved in a text file
