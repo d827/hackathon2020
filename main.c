@@ -21,7 +21,7 @@ int basicMath(); //Completed For Now
 int colorRead(); //Completed For Now
 void audioQ(); //Waiting for GUI
 void imageQ(); //Waiting for GUI
-void readingComp(); //Waiting for GUI
+int readingComp(); //Waiting for GUI
 char profileQ(); //In progress by Dorian
 int typingChallenge(); //Completed for Now
 void firstTime();
@@ -58,7 +58,11 @@ int main(int argc, char **argv){
     firstTime();
   }
   while(gameState == 1){
-
+    printf("This is the menu.");
+    int choice;
+    printf("Want to start? Press 1 to continue.");
+    scanf("%d", choice);
+    if(choice == 1) setGameState(2);
   }
   while(gameState == 2){
     for(int i = 0; i < 3; i++){
@@ -296,3 +300,68 @@ int typingChallenge(){
 // yellow.G = 232U;
 // yellow.B = 104U;
 // */
+
+int readingComp() {
+
+  srand(time(NULL));
+
+  int n,c,d,q;
+  char u_name[20],u_dog[20],u_color[20];
+  int result;
+  int score = 0;
+  int fail = 0;
+
+
+  while(score < 1 && fail < 3){
+
+    n = rand() % 3;
+    c = rand() % 3;
+    d = rand() % 3;
+    q = rand() % 3;
+
+    char color[3][20] = {"red","blue","yellow"};
+    char name[3][20] = {"Fred","John", "Billy"};
+    char dog[3][20] = {"Max","Spot","Rex"};
+
+    printf("\n\n%s was wearing a %s shirt and walking his dog %s down the street.\n",name[n],color[c],dog[d]);
+
+    if (q == 0){
+      printf("\nWhat was the man's name?\n");
+      scanf("%s",u_name);
+      result = strcmp(u_name,name[n]);
+    }
+    else if (q == 1){
+      printf("\nWhat was the dog's name?\n");
+      scanf("%s",u_dog);
+      result = strcmp(u_dog,dog[d]);
+    }
+    else{
+      printf("\nWhat color was the man's shirt?\n");
+      scanf("%s",u_color);
+      result = strcmp(u_color,color[c]);
+    }
+
+    if (result == 0){
+        printf("\nCorrect!\n");
+        score = score + 1;
+      }
+      else  {
+        printf("\nWrong!\n");
+        fail = fail + 1;
+
+      }
+
+
+  }
+      printf("\n---------");
+    if (score == 1){
+      printf("\nYou Passed!");
+      return 1;
+    }
+    else{
+      printf("\nYou Failed!");
+      return 0;
+    }
+
+  return 0;
+}
