@@ -6,12 +6,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define CRED "\x1B[31m"
-#define CGRN "\x1B[32m"
-#define CYEL "\x1B[33m"
-#define CBLU "\x1B[34m"
-#define ANSI_RED "\x1b[31m"
-
 //Global Variables
 int gameState = 0;
 char persistence[4][1000];
@@ -24,25 +18,19 @@ int imageScore = 0;
 int audioScore = 0;
 
 // Declaration of Functions
-void setGameState(); //Complete For Now
-int basicMath(); //Completed For Now
-int colorRead(); //Completed For Now
-void audioQ(); //Waiting for GUI
-void imageQ(); //Waiting for GUI
-int readingComp(); //Waiting for GUI
-int profileQ(); //In progress by Dorian
-int typingChallenge(); //Completed for Now
+void setGameState();
+int basicMath();
+int readingComp();
+int profileQ();
+int typingChallenge();
 void firstTime();
-
-
-
 
 
 int main(){
   int i = 0;
   FILE *filep;
   //char persistence[4][1000];
-  filep = fopen("persistence2.txt", "r");
+  filep = fopen("persistence6.txt", "r");
   if(filep == NULL){
     firstTime();
   }
@@ -85,12 +73,59 @@ int main(){
     setGameState(3);
   }
   while(gameState == 3){
-    printf("\nTOTAL SCORE: %d\n", totalScore);
+    printf("\nTOTAL SCORE: %d out of 9 possible points\n", totalScore);
+    printf("\nPercentage: %f%\n", (totalScore/9.0)*100);
     printf("--------Score Breakdown--------\n");
     printf("Math Score: %d\n", mathScore);
     printf("Typing Score: %d\n", typeScore);
     printf("Profiling score: %d\n", profScore);
     printf("Reading Score: %d\n", readingScore);
+    if(totalScore==9){
+      printf("Status:Basically Sober\n");
+      printf("--------Advice--------\n");
+      printf("Do not Operate Vechicles even though you are 'Sober'.\n");
+      printf("Continue drinking if wanted.\n");
+      printf("Maybe help out some friends that inebriated.\n");
+      printf("Get CRUNK'd next time.\n");
+      setGameState(4);
+    }
+    if(totalScore<9 && totalScore>=6){
+      printf("Status:Tipsy\n");
+      printf("--------Advice--------\n");
+      printf("Do not Operate Vechicles when you are not Sober.\n");
+      printf("Continue drinking if wanted, but pace yourself.\n");
+      printf("Maybe help out some friends that is more inebriated than you.\n");
+      printf("Get more CRUNK next time.\n");
+      setGameState(4);
+    }
+    if(totalScore<6 && totalScore<=4){
+      printf("Status:Drunk\n");
+      printf("--------Advice--------\n");
+      printf("Do not Operate Vechicles under the influence.\n");
+      printf("Try to lay off the drinks and start hydrating.\n");
+      printf("Maybe get help to find your way home or grab an uber.\n");
+      printf("You are near a good level of drinking.\n");
+      printf("Don't embarass yourself or hit anyone.");
+      setGameState(4);
+    }
+    if(totalScore<4 && totalScore>0){
+      printf("Status:Approaching Unbeknownst Levels Intoxication\n");
+      printf("--------Advice--------\n");
+      printf("Do not drinking besides water and relax.\n");
+      printf("Maybe don't drink for the rest of the week.\n");
+      printf("Get help from someone or some friends to detox.\n");
+      printf("Drink some gatorate for that hangover chief.\n");
+      setGameState(4);
+    }
+    if(totalScore==0){
+      printf("Status:How?\n");
+      printf("--------Advice--------\n");
+      printf("Do not anything. Not even your legs.\n");
+      printf("Wait how are you even taking this test?\n");
+      printf("Hold up, how did you make it to the scoring screen?\n");
+      printf("Kinda impressed, but next time do not get this CRUNK'd.\n");
+      setGameState(4);
+    }
     break;
   }
   while(gameState == 4){
@@ -114,8 +149,8 @@ void firstTime(){
   printf("\n");
 
   FILE *fp;
-  fp = fopen("persistence2.txt", "w");
-  if(fp == NULL) printf("persistence2.txt has failed to open.");
+  fp = fopen("persistence6.txt", "w");
+  if(fp == NULL) printf("persistence6.txt has failed to open.");
   else{
     fputs(name, fp);
     fputs("\n", fp);
@@ -146,21 +181,21 @@ void setGameState(int n){
 int profileQ(){
   srand(time(0));
   char ans[10];
-  int v1 = rand() % 2;
+  int v1 = rand() % 3;
   if(v1 == 0){
     printf("Do you remember your first name?: \n");
-    scanf("%s\n", &ans);
+    scanf(" %s\n", &ans);
     if((strcmp(ans, persistence[0])) == 0){
       printf("Correct!\n");
       return 1;
     }
-    printf("%s\n", persistence[0]);
+    printf(" %s\n", persistence[0]);
     printf("Incorrect!\n");
     return 0;
   }
   if(v1 == 1){
     printf("Do you remember your birthday? (Formatted MMDDYYYY): \n");
-    scanf("%s\n", &ans);
+    scanf(" %s\n", &ans);
     if((strcmp(ans, persistence[1])) == 0) {
       printf("Correct!\n");
       return 1;
@@ -171,7 +206,7 @@ int profileQ(){
   }
   if(v1 == 2){
     printf("Do you remember your favorite animal?: \n");
-    scanf("%s\n", &ans);
+    scanf(" %s\n", &ans);
     if((strcmp(ans, persistence[2])) == 0){
       printf("Correct!\n");
       return 1;
@@ -270,6 +305,7 @@ int readingComp() {
   int n,c,d,q;
   char u_name[20],u_dog[20],u_color[20];
   int result;
+  int choice;
   int score = 0;
   int fail = 0;
 
