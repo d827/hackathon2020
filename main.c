@@ -14,6 +14,14 @@
 
 //Global Variables
 int gameState = 0;
+char persistence[4][1000];
+int totalScore = 0;
+int mathScore = 0;
+int typeScore = 0;
+int profScore = 0;
+int readingScore = 0;
+int imageScore = 0;
+int audioScore = 0;
 
 // Declaration of Functions
 void setGameState(); //Complete For Now
@@ -22,7 +30,7 @@ int colorRead(); //Completed For Now
 void audioQ(); //Waiting for GUI
 void imageQ(); //Waiting for GUI
 int readingComp(); //Waiting for GUI
-char profileQ(); //In progress by Dorian
+int profileQ(); //In progress by Dorian
 int typingChallenge(); //Completed for Now
 void firstTime();
 
@@ -31,40 +39,31 @@ void firstTime();
 
 
 int main(){
-  int totalScore = 0;
-  int mathScore = 0;
-  int typeScore = 0;
-  int profScore = 0;
-  int readingScore = 0;
-  int imageScore = 0;
-  int audioScore = 0;
-
   int i = 0;
   FILE *filep;
-  char persistence[4][1000];
+  //char persistence[4][1000];
   filep = fopen("persistence2.txt", "r");
   if(filep == NULL){
-    gameState = 0;
+    firstTime();
   }
   while((fgets(persistence[i], 1000, filep)) != NULL){
-    printf("%s", persistence[i]);
     i++;
   }
   fclose(filep);
 
-  if(persistence[3][0] == '1') gameState == 1;
+  if(persistence[3][0] == '1') setGameState(1);
 
   while(gameState == 0){
     firstTime();
   }
   while(gameState == 1){
-    printf("This is the menu.");
+    printf("This is the menu. ");
     int choice;
-    printf("Want to start? Press 2 to continue. Press any other key to exit.");
-    scanf("%d", choice);
-    if(choice == 2) setGameState(2);
+    printf("Want to start? Press 1 to continue. Press any other key to exit.");
+    scanf("%d", &choice);
+    if(choice == 1) setGameState(2);
     else{
-      setGameState(3);
+      setGameState(4);
     }
 
   }
@@ -77,13 +76,26 @@ int main(){
     int result2 = typingChallenge();
     if(result2 == 1) typeScore += 1;
     totalScore += typeScore;
+    int result4 = profileQ();
+    if(result4 == 1) profScore += 1;
+    totalScore += profScore;
+    int result3 = readingComp();
+    if(result3 == 1) readingScore += 1;
+    totalScore += readingScore;
+    setGameState(3);
   }
   while(gameState == 3){
-    printf("\nExit.\n");
+    printf("\nTOTAL SCORE: %d\n", totalScore);
+    printf("--------Score Breakdown--------\n");
+    printf("Math Score: %d\n", mathScore);
+    printf("Typing Score: %d\n", typeScore);
+    printf("Profiling score: %d\n", profScore);
+    printf("Reading Score: %d\n", readingScore);
     break;
   }
   while(gameState == 4){
-
+    printf("\nExiting...\n");
+    break;
   }
 }
 
@@ -127,182 +139,129 @@ void setGameState(int n){
   if(n == 0) gameState = 0; //First time startup
   if(n == 1) gameState = 1; //Menu
   if(n == 2) gameState = 2; //Play
-  if(n == 3) gameState = 3; //Exit
-  if(n == 4) gameState = 4; //Error screen
+  if(n == 3) gameState = 3; //Score Breakdown
+  if(n == 4) gameState = 4; //Exit
+}
+
+int profileQ(){
+  srand(time(0));
+  char ans[10];
+  int v1 = rand() % 2;
+  if(v1 == 0){
+    printf("Do you remember your first name?: \n");
+    scanf("%s\n", &ans);
+    if((strcmp(ans, persistence[0])) == 0){
+      printf("Correct!\n");
+      return 1;
+    }
+    printf("%s\n", persistence[0]);
+    printf("Incorrect!\n");
+    return 0;
+  }
+  if(v1 == 1){
+    printf("Do you remember your birthday? (Formatted MMDDYYYY): \n");
+    scanf("%s\n", &ans);
+    if((strcmp(ans, persistence[1])) == 0) {
+      printf("Correct!\n");
+      return 1;
+    }
+    printf("%s\n", persistence[1]);
+    printf("Incorrect!\n");
+    return 0;
+  }
+  if(v1 == 2){
+    printf("Do you remember your favorite animal?: \n");
+    scanf("%s\n", &ans);
+    if((strcmp(ans, persistence[2])) == 0){
+      printf("Correct!\n");
+      return 1;
+    }
+    printf("%s\n", persistence[2]);
+    printf("Incorrect!\n");
+    return 0;
+  }
 }
 
 int basicMath(){
   int score;
   srand(time(0));
-  int v1 = rand() % 100; //First Variable
-  int v2 = rand() % 100; //Second Variable
+  int v1 = rand() % 50; //First Variable
+  int v2 = rand() % 50; //Second Variable
   int eq = v1 + v2; //Eq value
-  printf("What is the value of %d + %d? :> ",v1,v2);//Print Statement asking for values
+  printf("What is the value of %d + %d? :> ", v1, v2);//Print Statement asking for values
   scanf("%d",&eq);   //Equation input
-  if(eq==v1+v2){
+  if(eq == v1 + v2){
+    printf("\nCorrect!\n");
     score = 1;
+    return score;
   }
   else{
+    printf("\nWrong!\n");
     score = 0;
+    return score;
   }
-  return score;
 }
 
 int typingChallenge(){
 
-    srand(time(NULL));
+  srand(time(NULL));
 
-    FILE *infile;
-    infile = fopen("words.txt","r");
+  FILE *infile;
+  infile = fopen("words.txt","r");
 
-    char Lbuffer[133][1000];
-    char user[1000];
-    char n = '\n';
+  char Lbuffer[133][1000];
+  char user[1000];
+  char n = '\n';
 
-    int i = 0;
-    int j = 0;
+  int i = 0;
+  int j = 0;
 
-    int result;
+  int result;
 
-    int score = 0;
-    int fail = 0;
+  int score = 0;
+  int fail = 0;
 
-    while(fgets(Lbuffer[i],1000,infile) != NULL){
+  while(fgets(Lbuffer[i],1000,infile) != NULL){
 
-     i++;
+   i++;
 
-    }
+  }
 
-    while(score < 3 && fail < 3){
+  while(score < 3 && fail < 3){
 
-      j = rand() % 133;
-
-      printf("\n---------");
-      printf("\nPlease type the following word and press enter:\n\n%s\n",Lbuffer[j]);
-
-      scanf("%s", user);
-      strncat(user,&n,1);
-
-      result = strcmp(Lbuffer[j],user);
-
-      if (result == 0){
-        printf("\nCorrect!\n");
-        score = score + 1;
-      }
-      else  {
-        printf("\nWrong!\n");
-        fail = fail + 1;
-
-      }
-    fclose (infile);
-
+    j = rand() % 133;
 
     printf("\n---------");
-    if (score == 3){
-      printf("\nYou Passed!");
-      return 1;
+    printf("\nPlease type the following word and press enter:\n\n%s\n",Lbuffer[j]);
+
+    scanf("%s", user);
+    strncat(user,&n,1);
+
+    result = strcmp(Lbuffer[j],user);
+
+    if (result == 0){
+      printf("\nCorrect!\n");
+      score = score + 1;
     }
-    else{
-      printf("\nYou Failed!");
-      return 0;
+    else  {
+      printf("\nWrong!\n");
+      fail = fail + 1;
+
     }
   }
-}
+  fclose (infile);
 
-// int colorRead(){
-// //Initializing Values 0-3 for array values
-//   int score;
-//   srand(time(0));
-//   char colors[4] = {CRED,CGRN,CYEL,CBLU}; //Array storing labels of different color strings
-//   char colorWords[4] = {"Red","Green","Yellow","Blue"}
-//   int color = rand() % 4; //random values chosen for array
-//   int colorWord = rand() % 4; //Value for ColorWord Array
-//   // int color2 = rand() % 4;
-//   // int color3 = rand() % 4;
-//   // int color4 = rand() % 4;
-// //Declaring color variables
-//   colors[0] = CRED;
-//   colors[1] = CGRN;
-//   colors[2] = CBLU;
-//   colors[3] = CYEL;
-//
-// /* Print and Scan statements for retrieving Inputs */
-//
-// //First Test
-//   char ans[6];
-//   printf("What does this word say -> %s", colors[color]);
-//   printf("%s ?", colorWords[colorWord]);
-//   printf(colors[2]);
-//
-//   scanf("%s", &ans);
-//   if(strcmp(ans, colorWords[colorWord]) == 0){
-//     score += 1;
-//   }
-//   else{
-//     score += 0;
-//   }
-//
-// //Second Test
-// //   char Second;
-// //   printf("What is the color on this word -> %sGreen?\n",colors[color2]);
-// //   scanf("%s",&Second);
-// //   if(Second == colors[color2]){
-// //     score += 1;
-// //   }
-// //   else{
-// //     score += 0;
-// //   }
-// //
-// // //Third Test
-// //   char Third;
-// //   printf("What is the color on this word -> %sBlue?\n",colors[color3]);
-// //   scanf("%s",&Third);
-// //   if(Third == colors[color3]){
-// //     score += 1;
-// //   }
-// //   else{
-// //     score += 0;
-// //   }
-// //
-// // //Fourth Test
-// //   char Fourth;
-// //   printf("What is the color on this word -> %sYellow?\n",)colors[color4];
-// //   scanf("%s",&Fourth);
-// //   if(Fourth == color[color4]){
-// //     score += 1;
-// //   }
-// //   else{
-// //     score += 0;
-// //   }
-// //   return score;
-// }
-//
-// /*typedef struct Color{
-//   uint8_t R;
-//   uint8_t G;
-//   uint8_t B;
-// }colortype;
-//
-// colortype red;
-// red.R = 255U;
-// red.G = 0U;
-// red.B = 0U;
-//
-// colortype green;
-// green.R = 0U;
-// green.G = 255U;
-// green.B = 0U;
-//
-// colortype blue;
-// blue.R = 0U;
-// blue.G = 0U;
-// blue.B = 255U;
-//
-// colortype yellow;
-// yellow.R = 244U;
-// yellow.G = 232U;
-// yellow.B = 104U;
-// */
+
+  printf("\n---------");
+  if (score == 3){
+    printf("\nYou Passed!\n");
+    return 1;
+  }
+  else{
+    printf("\nYou Failed!\n");
+    return 0;
+  }
+}
 
 int readingComp() {
 
@@ -315,7 +274,7 @@ int readingComp() {
   int fail = 0;
 
 
-  while(score < 1 && fail < 3){
+  while(score < 2 && fail < 3){
 
     n = rand() % 3;
     c = rand() % 3;
@@ -347,24 +306,21 @@ int readingComp() {
     if (result == 0){
         printf("\nCorrect!\n");
         score = score + 1;
-      }
-      else  {
-        printf("\nWrong!\n");
-        fail = fail + 1;
+    }
+    else  {
+      printf("\nWrong!\n");
+      fail = fail + 1;
 
-      }
-
-
+    }
   }
-      printf("\n---------");
-    if (score == 1){
-      printf("\nYou Passed!");
-      return 1;
-    }
-    else{
-      printf("\nYou Failed!");
-      return 0;
-    }
-
+    printf("\n---------");
+  if (score == 2){
+    printf("\nYou Passed!\n");
+    return 1;
+  }
+  else{
+    printf("\nYou Failed!\n");
+    return 0;
+  }
   return 0;
 }
