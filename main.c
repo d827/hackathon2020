@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdint.h>
-#include <conio.h>
+#include <stdlib.h>
 
 #define CRED "\x1B[31m"
 #define CGRN "\x1B[32m"
@@ -23,40 +23,67 @@ void AudioQ(); //Waiting for GUI
 void ImageQ(); //Waiting for GUI
 void ReadingComp(); //Waiting for GUI
 char ProfileQ(); //In progress by Dorian
-int typing_challenge(); //In Progress by Mike
+int typing_challenge(); //Completed for Now
 
 
 
 
 
 int main(int argc, char **argv){
-  // while(gameState == 0){
-  //
-  // }
-  // while(gameState == 1){
-  //
-  // }
-  // while(gameState == 2){
-  //
-  // }
-  // while(gameState == 3){
-  //
-  // }
+  int totalScore = 0;
+  int math_score = 0;
+  int type_score = 0;
+  int prof_score = 0;
+  int reading_score = 0;
+  int image_score = 0;
+  int audio_score = 0;
+  
+  int i = 0;
+  FILE *filep;
+  char persistence[4][1000];
+  filep = fopen("persistence.txt", "r");
+  if(filep == NULL){
+    gameState = 0;
+  }
+  while((fgets(persistence[i], 1000, filep)) != NULL){
+    printf("%s", persistence[i]);
+    i++;
+  }
+  fclose(filep);
+
+  if(persistence[3] == '1') gameState == 1;
+
+  while(gameState == 0){
+    firstTime();
+  }
+  while(gameState == 1){
+
+  }
+  while(gameState == 2){
+
+  }
+  while(gameState == 3){
+
+  }
+  while(gameState == 4){
+
+  }
 }
 
 void firstTime(){
-  printf("%s" "blue", ANSI_BLUE);
-  char name[20], sq1c[1], sq1[30], bday[8];
-  char initializedGameState[1];
+  char name[20], animal[30], bday[9];
+  char initializedGameState[2];
   initializedGameState[0] = '1';
+  initializedGameState[1] = '\0';
   printf("Hello and welcome to Detox.me! Please complete this quick first time setup.\n");
   printf("Please enter your name:\n");
   scanf("%s", &name);
   printf("\nPlease enter your birthdate (formatted MMDDYYYY):\n");
   scanf("%s", &bday);
-  printf("\nHello %s, please choose a security question:\n", name);
-  scanf("%s", &sq1);
+  printf("\nHello %s, please choose a favorite animal:\n", name);
+  scanf("%s", &animal);
   printf("\n");
+
   FILE *fp;
   fp = fopen("persistence.txt", "w");
   if(fp == NULL) printf("persistence.txt has failed to open.");
@@ -65,7 +92,7 @@ void firstTime(){
     fputs("\n", fp);
     fputs(bday, fp);
     fputs("\n", fp);
-    fputs(sq1, fp);
+    fputs(animal, fp);
     fputs("\n", fp);
     fputs(initializedGameState, fp);
     fputs("\n", fp);
@@ -84,6 +111,7 @@ void setGameState(int n){
   if(n == 1) gameState = 1; //Menu
   if(n == 2) gameState = 2; //Play
   if(n == 3) gameState = 3; //Exit
+  if(n == 4) gameState = 4; //Error screen
 }
 
 int BasicMath(int v1, int v2, int eq, int M_Score){
@@ -104,6 +132,65 @@ int BasicMath(int v1, int v2, int eq, int M_Score){
 }
 
 int typing_challenge(){
+
+    srand(time(NULL));
+
+    FILE *infile;
+    infile = fopen("words.txt","r");
+
+    char Lbuffer[133][1000];
+    char user[1000];
+    char n = '\n';
+
+    int i = 0;
+    int j = 0;
+
+    int result;
+
+    int score = 0;
+    int fail = 0;
+
+    while(fgets(Lbuffer[i],1000,infile) != NULL){
+
+     i++;
+
+    }
+
+    while(score < 3 && fail < 3){
+
+      j = rand() % 133;
+
+      printf("\n---------");
+      printf("\nPlease type the following word and press enter:\n\n%s\n",Lbuffer[j]);
+
+      scanf("%s", user);
+      strncat(user,&n,1);
+
+      result = strcmp(Lbuffer[j],user);
+
+      if (result == 0){
+        printf("\nCorrect!\n");
+        score = score + 1;}
+
+      else  {
+        printf("\nWrong!\n");
+        fail = fail + 1;}
+
+      }
+    fclose (infile);
+
+
+    printf("\n---------");
+    if (score == 3){
+      printf("\nYou Passed!");
+      return 1;
+    }
+    else{
+      printf("\nYou Failed!");
+      return 0;
+    }
+
+  }
 
 
 }
